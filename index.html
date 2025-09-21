@@ -7,9 +7,32 @@
 </head>
 <body>
     <p>Hello, World!</p>
+    <hr>
+    <input type="text" id="nameInput" placeholder="Enter a name">
+    <button onclick="callCloudFunction()">Call Cloud Function</button>
+    <div id="function-result"></div>
+    <hr>
     <div id="signInDiv"></div>
     <div id="token-display"></div>
     <script>
+      async function callCloudFunction() {
+        const name = document.getElementById('nameInput').value;
+        const url = `https://hello-world-nwkey524dq-uc.a.run.app?name=${encodeURIComponent(name)}`;
+        const resultDiv = document.getElementById('function-result');
+        resultDiv.innerText = "Calling...";
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const text = await response.text();
+          resultDiv.innerText = text;
+        } catch (error) {
+          resultDiv.innerText = 'Error: ' + error;
+        }
+      }
+
       function handleCredentialResponse(response) {
         document.getElementById("token-display").innerText = "Token: " + response.credential;
       }
