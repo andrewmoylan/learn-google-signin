@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello, World!</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <p>Hello, World!</p>
+    <div id="signInDiv"></div>
+    <div id="token-display"></div>
+    <script>
+      function handleCredentialResponse(response) {
+        document.getElementById("token-display").innerText = "Token: " + response.credential;
+      }
+      window.onload = function () {
+        google.accounts.id.initialize({
+          client_id: "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+          callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          { theme: "outline", size: "large" }
+        );
+      }
+    </script>
 </body>
 </html>
