@@ -12,7 +12,12 @@
     <hr>
     <div id="signInDiv"></div>
     <div id="token-display"></div>
+    <hr>
+    <button onclick="callCheckToken()">Call Check Token Cloud Function</button>
+    <div id="check-token-result"></div>
     <script>
+      let googleIdToken = null;
+
       async function callHelloWorld() {
         const name = document.getElementById('nameInput').value;
         const url = `https://hello-world-nwkey524dq-uc.a.run.app?name=${encodeURIComponent(name)}`;
@@ -31,7 +36,34 @@
         }
       }
 
+      async function callCheckToken() {
+        const url = `https://check-token-nwkey524dq-uc.a.run.app`;
+        const resultDiv = document.getElementById('check-token-result');
+        resultDiv.innerText = "Calling...";
+
+        if (!googleIdToken) {
+          resultDiv.innerText = 'Error: No token available. Please sign in first.';
+          return;
+        }
+
+        try {
+          const response = await fetch(url, {
+            headers: {
+              'Authorization': `Bearer ${googleIdToken}`
+            }
+          });
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const text = await response.text();
+          resultDiv.innerText = text;
+        } catch (error) {
+          resultDiv.innerText = 'Error: ' + error;
+        }
+      }
+
       function handleCredentialResponse(response) {
+        googleIdToken = response.credential;
         document.getElementById("token-display").innerText = "Token: " + response.credential;
       }
       window.onload = function () {
