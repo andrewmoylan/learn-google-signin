@@ -8,7 +8,7 @@
 <body>
     <input type="text" id="nameInput" value="World">
     <button onclick="callHelloWorld()">Call Hello World Cloud Function</button>
-    <div id="function-result"></div>
+    <div id="hello-world-result"></div>
     <hr>
     <div id="signInDiv"></div>
     <div id="token-display"></div>
@@ -21,7 +21,7 @@
       async function callHelloWorld() {
         const name = document.getElementById('nameInput').value;
         const url = `https://hello-world-nwkey524dq-uc.a.run.app?name=${encodeURIComponent(name)}`;
-        const resultDiv = document.getElementById('function-result');
+        const resultDiv = document.getElementById('hello-world-result');
         resultDiv.innerText = "Calling...";
 
         try {
